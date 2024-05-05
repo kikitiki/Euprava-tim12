@@ -2,12 +2,10 @@ package data
 
 import (
 	"context"
-	"crypto/rand"
 	"fmt"
 	"log"
 	"os"
 	"otvoreni_podaci/utils"
-	"strconv"
 	"time"
 
 	//"github.com/gorilla/sessions"
@@ -107,16 +105,45 @@ func (ur *UserRepo) GetByUsername(name string) (Users, error) {
 	return users, nil
 }
 
+func (ur *UserRepo) GetByDataId(id string) (*OpenData, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	dataCollection := ur.getCollection()
+
+	var data OpenData
+	objID, _ := primitive.ObjectIDFromHex(id)
+	err := dataCollection.FindOne(ctx, bson.M{"_id": objID}).Decode(&data)
+	if err != nil {
+		ur.logger.Println(err)
+		return nil, err
+	}
+	return &data, nil
+}
+
+func (ur *UserRepo) GetOneDataByDescription(description string) (OpenDatas, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	dataCollection := ur.getCollection()
+
+	var data OpenDatas
+	usersCursor, err := dataCollection.Find(ctx, bson.M{"description": description})
+	if err != nil {
+		ur.logger.Println(err)
+		return nil, err
+	}
+	if err = usersCursor.All(ctx, &data); err != nil {
+		ur.logger.Println(err)
+		return nil, err
+	}
+	return data, nil
+}
+
 func (ur *UserRepo) Post(user *User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	usersCollection := ur.getCollection()
-	//tempPass := user.Password
-	RandomCrypto, _ := rand.Prime(rand.Reader, 42)
-	conversionInt := RandomCrypto.String()
-	user.RegisterCode, _ = strconv.Atoi(conversionInt)
-
-	//user.Password, _ = HashPassword(user.Password)
 
 	result, err := usersCollection.InsertOne(ctx, &user)
 	if err != nil {
@@ -149,13 +176,9 @@ func (ur *UserRepo) Put(id string, user *User) error {
 	filter := bson.M{"_id": objID}
 	update := bson.M{"$set": bson.M{
 		"name":      user.Name,
-		"surname":   user.Surname,
 		"username":  user.Username,
 		"password":  user.Password,
-		"age":       user.Age,
 		"gender":    user.Gender,
-		"residance": user.Residance,
-		"code":      user.RegisterCode,
 	}}
 	result, err := usersCollection.UpdateOne(ctx, filter, update)
 	ur.logger.Printf("Documents matched: %v\n", result.MatchedCount)

@@ -1,0 +1,62 @@
+version: "3.1"
+
+services:
+  api:
+    build: 
+      context: ./api_gateway
+      dockerfile: Dockerfile
+    restart: always
+    container_name: "api_gateway"
+    hostname: "api_gateway"
+    ports:
+      - 8080:8080
+    depends_on:
+      - otvoreni_podaci
+    networks:
+      - network
+
+  otvoreni_podaci:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    container_name: ${DATA_SERVICE_HOST}
+    hostname: ${DATA_SERVICE_HOST}
+    environment:
+      - DATA_SERVICE_PORT=${DATA_SERVICE_PORT}
+      - MONGO_DB_URI=mongodb://root:pass@mongo:27017
+      - ACCESS_TOKEN_PRIVATE_KEY=${ACCESS_TOKEN_PRIVATE_KEY}
+      - ACCESS_TOKEN_PUBLIC_KEY=${ACCESS_TOKEN_PUBLIC_KEY}
+    depends_on:
+     mongo:
+        condition: service_healthy
+    networks:
+      - network
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_DATABASE: mongoDemo
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok'
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    volumes:
+      - mongo_store:/data/db
+    networks:
+      - network
+
+
+volumes:
+  mongo_store:
+
+
+networks:
+  network:
+    driver: bridge

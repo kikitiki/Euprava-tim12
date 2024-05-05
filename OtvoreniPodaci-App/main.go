@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"otvoreni_podaci/data"
 	"otvoreni_podaci/handlers"
-	"os/signal"
 	"syscall"
 	"time"
 
@@ -17,10 +17,10 @@ import (
 )
 
 func main() {
-	logger := log.New(os.Stdout, "[user-api] ", log.LstdFlags)
-	storeLogger := log.New(os.Stdout, "[user-store] ", log.LstdFlags)
+	logger := log.New(os.Stdout, "[data-api] ", log.LstdFlags)
+	storeLogger := log.New(os.Stdout, "[data-store] ", log.LstdFlags)
 
-	port := os.Getenv("USER_SERVICE_PORT")
+	port := os.Getenv("DATA_SERVICE_PORT")
 	if len(port) == 0 {
 		port = "8080"
 	}
@@ -48,22 +48,41 @@ func main() {
 	router := mux.NewRouter()
 	router.Use(dataHandler.MiddlewareContentTypeSet)
 
-	getRouter := router.Methods(http.MethodGet).Subrouter()
-	getRouter.HandleFunc("/{context}/", dataHandler.GetOneDataByContext)
+	getDataDescriptionRouter := router.Methods(http.MethodGet).Subrouter()
+	getDataDescriptionRouter.HandleFunc("/opendata/{description}", dataHandler.GetOneDataByDescription)
 
+	getDataIdRouter := router.Methods(http.MethodGet).Subrouter()
+	getDataIdRouter.HandleFunc("/opendata/{id}", dataHandler.GetByDataId)
+
+	getUserIdRouter := router.Methods(http.MethodGet).Subrouter()
+	getUserIdRouter.HandleFunc("/user/{id}", dataHandler.GetByUserId)
+
+	getUserUsernameRouter := router.Methods(http.MethodGet).Subrouter()
+	getUserUsernameRouter.HandleFunc("/user/{username}", dataHandler.GetByUsername)
+
+	postUserRouter := router.Methods(http.MethodPost).Subrouter()
+	postUserRouter.HandleFunc("/register/", dataHandler.PostUser)
+	postUserRouter.Use(dataHandler.MiddlewareUserValidation)
+
+	postDataRouter := router.Methods(http.MethodPost).Subrouter()
+	postDataRouter.HandleFunc("/data/", dataHandler.PostData)
+
+	deleteHandler := router.Methods(http.MethodDelete).Subrouter()
+	deleteHandler.HandleFunc("/{id}", dataHandler.DeleteUser)
 
 	cors := gorillaHandlers.CORS(gorillaHandlers.AllowedOrigins([]string{"http://localhost:4200"}))
 	cors = gorillaHandlers.CORS(gorillaHandlers.AllowCredentials())
 
 	server := http.Server{
-		Addr:         ":" + port,        
-		Handler:      cors(router),      
-		IdleTimeout:  120 * time.Second, 
-		ReadTimeout:  5 * time.Second,   
-		WriteTimeout: 5 * time.Second,   
+		Addr:         ":" + port,
+		Handler:      cors(router),
+		IdleTimeout:  120 * time.Second,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 5 * time.Second,
 	}
 
 	logger.Println("Server listening on port", port)
+	logger.Println("Available ", server.Addr)
 
 	go func() {
 		err := server.ListenAndServe()

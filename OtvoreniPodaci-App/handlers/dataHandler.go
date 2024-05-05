@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"otvoreni_podaci/data"
@@ -31,7 +32,7 @@ func (p *OpenDataHandler) MiddlewareContentTypeSet(next http.Handler) http.Handl
 	})
 }
 
-func (p *OpenDataHandler) GetOneDataById(rw http.ResponseWriter, h *http.Request) {
+func (p *OpenDataHandler) GetByUserId(rw http.ResponseWriter, h *http.Request) {
 	vars := mux.Vars(h)
 	id := vars["id"]
 
@@ -55,7 +56,7 @@ func (p *OpenDataHandler) GetOneDataById(rw http.ResponseWriter, h *http.Request
 	}
 }
 
-func (p *OpenDataHandler) GetOneDataByContext(rw http.ResponseWriter, h *http.Request) {
+func (p *OpenDataHandler) GetByUsername(rw http.ResponseWriter, h *http.Request) {
 	vars := mux.Vars(h)
 	username := vars["username"]
 
@@ -72,6 +73,54 @@ func (p *OpenDataHandler) GetOneDataByContext(rw http.ResponseWriter, h *http.Re
 	}
 
 	err = user.ToJSON(rw)
+	if err != nil {
+		http.Error(rw, "Unable to convert to json", http.StatusInternalServerError)
+		p.logger.Fatal("Unable to convert to json :", err)
+		return
+	}
+}
+
+func (p *OpenDataHandler) GetByDataId(rw http.ResponseWriter, h *http.Request) {
+	vars := mux.Vars(h)
+	id := vars["id"]
+
+	data, err := p.repo.GetByDataId(id)
+	if err != nil {
+		http.Error(rw, "Database exception", http.StatusInternalServerError)
+		p.logger.Fatal("Database exception: ", err)
+	}
+
+	if data == nil {
+		http.Error(rw, "User with given id not found", http.StatusNotFound)
+		p.logger.Printf("User with id: '%s' not found", id)
+		return
+	}
+
+	err = data.ToJSON(rw)
+	if err != nil {
+		http.Error(rw, "Unable to convert to json", http.StatusInternalServerError)
+		p.logger.Fatal("Unable to convert to json :", err)
+		return
+	}
+}
+
+func (p *OpenDataHandler) GetOneDataByDescription(rw http.ResponseWriter, h *http.Request) {
+	vars := mux.Vars(h)
+	description := vars["description"]
+
+	data, err := p.repo.GetOneDataByDescription(description)
+	if err != nil {
+		http.Error(rw, "Database exception", http.StatusInternalServerError)
+		p.logger.Fatal("Database exception: ", err)
+	}
+
+	if data == nil {
+		http.Error(rw, "User with given id not found", http.StatusNotFound)
+		p.logger.Printf("User with id: '%s' not found", description)
+		return
+	}
+
+	err = data.ToJSON(rw)
 	if err != nil {
 		http.Error(rw, "Unable to convert to json", http.StatusInternalServerError)
 		p.logger.Fatal("Unable to convert to json :", err)
@@ -204,4 +253,32 @@ func (p *OpenDataHandler) LogoutUser(rw http.ResponseWriter, h *http.Request) {
 		return
 	}
 	rw.WriteHeader(http.StatusOK)
+}
+
+//------middleware
+
+func (p *OpenDataHandler) MiddlewareUserValidation(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(rw http.ResponseWriter, h *http.Request) {
+		user := &data.User{}
+		err := user.FromJSON(h.Body)
+		if err != nil {
+			http.Error(rw, "Unable to decode json", http.StatusBadRequest)
+			p.logger.Fatal(err)
+			return
+		}
+
+		/*users, err := p.repo.GetByUsername(user.Username)
+		if users != nil {
+			p.logger.Println("Error: username exists", err)
+			http.Error(rw, fmt.Sprintf("Error: username exits, %s", err), http.StatusBadRequest)
+			return
+		}*/
+
+		//user.Password, _ = data.HashPassword(user.Password)
+
+		ctx := context.WithValue(h.Context(), KeyOpenData{}, user)
+		h = h.WithContext(ctx)
+
+		next.ServeHTTP(rw, h)
+	})
 }
