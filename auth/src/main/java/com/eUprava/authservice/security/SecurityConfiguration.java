@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -22,18 +23,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
+    private final UserDetailsService userDetailsService;
 
     @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    public void configureAuthentication(
-            AuthenticationManagerBuilder authenticationManagerBuilder)
-            throws Exception {
-
-        authenticationManagerBuilder
-                .userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
+    public SecurityConfiguration(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
+
+
+
+//    @Autowired
+//    public void configureAuthentication(
+//            AuthenticationManagerBuilder authenticationManagerBuilder)
+//            throws Exception {
+//
+//        authenticationManagerBuilder
+//                .userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -41,27 +47,19 @@ public class SecurityConfiguration {
     }
 
     @Bean
-
     public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-//    @Bean
-//    public AuthenticationTokenFilter authenticationTokenFilterBean(AuthenticationManager authenticationManager) throws Exception {
-//        AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();
-//        authenticationTokenFilter.setAuthenticationManager(authenticationManager);
-//        return authenticationTokenFilter;
-//    }
-
     @Bean
-    public AuthenticationTokenFilter authenticationTokenFilter(AuthenticationManager authenticationManager) {
+    public AuthenticationTokenFilter authenticationTokenFilterBean(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();
-        authenticationTokenFilter.setAuthenticationManager(authenticationManager);
+        authenticationTokenFilter.setAuthenticationManager(authenticationManagerBean(authenticationConfiguration));
         return authenticationTokenFilter;
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationConfiguration authenticationConfiguration) throws Exception {
         httpSecurity
                 .cors(cors -> cors.disable())
                 .csrf(csrf -> csrf.disable())
@@ -71,8 +69,46 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/auth/login").permitAll()
                         .anyRequest().authenticated());
 
-        httpSecurity.addFilterBefore(authenticationTokenFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(authenticationTokenFilterBean(authenticationConfiguration), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
+
+
+//
+//    @Bean
+//    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
+//    @Autowired
+//    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+//        authenticationManagerBuilder
+//                .userDetailsService(userDetailsService)
+//                .passwordEncoder(passwordEncoder());
+//    }
+
+
+
+//    @Bean
+//    public AuthenticationTokenFilter authenticationTokenFilter(AuthenticationManager authenticationManager) {
+//        AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();
+//        authenticationTokenFilter.setAuthenticationManager(authenticationManager);
+//        return authenticationTokenFilter;
+//    }
+
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
+//        httpSecurity
+//                .cors(cors -> cors.disable())
+//                .csrf(csrf -> csrf.disable())
+//                .sessionManagement(sessionManagement -> sessionManagement
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+//                        .requestMatchers("/api/auth/login").permitAll()
+//                        .anyRequest().authenticated());
+//
+//        httpSecurity.addFilterBefore(authenticationTokenFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class);
+//
+//        return httpSecurity.build();
+//    }
 }

@@ -21,32 +21,34 @@ import org.springframework.web.bind.annotation.RestController;
 public class KorisnikController {
     @Autowired
     UserDetailsService userDetailsService;
+
     @Autowired
     AuthenticationManager authenticationManager;
+
     @Autowired
     TokenUtils tokenUtils;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody KorisnikDto userDto){
+    public ResponseEntity<String> login(@RequestBody KorisnikDto userDto) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword());
-
-        try{
+        try {
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        }catch (BadCredentialsException ex){
+        } catch (BadCredentialsException ex) {
             return ResponseEntity.status(404).build();
-        }catch (LockedException ex){
-
-        }catch (DisabledException ex){
+        } catch (LockedException ex) {
+            // do something
+        } catch (DisabledException ex) {
             return ResponseEntity.status(403).build();
         }
 
         try {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userDto.getUsername());
-
 
             return ResponseEntity.ok(tokenUtils.generateToken(userDetails));
         } catch (UsernameNotFoundException e) {

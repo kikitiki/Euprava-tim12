@@ -1,22 +1,29 @@
 package com.eUprava.authservice.model;
-
 import jakarta.persistence.*;
 import lombok.Data;
 
+
+
 @Entity
 @Data
+@Table(name = "korisnik", uniqueConstraints = {@UniqueConstraint(columnNames = "username")})
 public class Korisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
+
     private String ime;
+
     private String prezime;
+
     private String username;
 
     @Column(length = 60)
     private String lozinka;
+    @Column
     private String uloga;
+
     private boolean enabled = false;
 
     public Korisnik(Long id, String ime, String prezime, String username, String lozinka, String uloga, boolean enabled) {
@@ -27,6 +34,10 @@ public class Korisnik {
         this.lozinka = lozinka;
         this.uloga = uloga;
         this.enabled = enabled;
+    }
+
+    public Korisnik() {
+
     }
 
     public Long getId() {

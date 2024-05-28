@@ -11,6 +11,7 @@ public class KorisnikDto {
 
     @NotBlank
     private String username;
+
     @NotBlank
     private String password;
 
