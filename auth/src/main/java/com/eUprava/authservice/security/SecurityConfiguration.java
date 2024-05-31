@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -31,15 +30,6 @@ public class SecurityConfiguration {
     }
 
 
-
-//    @Autowired
-//    public void configureAuthentication(
-//            AuthenticationManagerBuilder authenticationManagerBuilder)
-//            throws Exception {
-//
-//        authenticationManagerBuilder
-//                .userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -58,8 +48,8 @@ public class SecurityConfiguration {
         return authenticationTokenFilter;
     }
 
-        @Bean
-        public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationConfiguration authenticationConfiguration) throws Exception {
         httpSecurity
                 .cors(cors -> cors.disable())
                 .csrf(csrf -> csrf.disable())
@@ -67,7 +57,8 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/api/auth/login").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated())
+                .httpBasic(httpBasic -> httpBasic.disable());
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(authenticationConfiguration), UsernamePasswordAuthenticationFilter.class);
 

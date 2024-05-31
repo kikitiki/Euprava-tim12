@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:latest
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'maticar1'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  auth-service:
+    image: authimg
+    container_name: authcont
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:mysql://db:3306/maticar1'
+      SPRING_DATASOURCE_USERNAME: 'root'
+      SPRING_DATASOURCE_PASSWORD: 'root'
+      SPRING_JPA_HIBERNATE_DDL-AUTO: 'update'
+      SPRING_JPA_SHOW-SQL: 'true'
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: 'true'
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: 'org.hibernate.dialect.MySQL8Dialect'
+      SECURITY_BASIC_ENABLED: 'false'
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK: 'DEBUG'
+      LOGGING_LEVEL_COM_EUPRAVA_AUTHSERVICE: 'DEBUG'
+
+volumes:
+  dbdata:
