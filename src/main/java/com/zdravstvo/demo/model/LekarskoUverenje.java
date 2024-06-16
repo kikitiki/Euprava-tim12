@@ -19,7 +19,7 @@ public class LekarskoUverenje {
 
     private String poruka;
 
-    private LekarskoUverenje(String studentJmbg,String poruka){
+    public LekarskoUverenje(String studentJmbg,String poruka){
         this.studentJmbg = studentJmbg;
         this.poruka = poruka;
     }
