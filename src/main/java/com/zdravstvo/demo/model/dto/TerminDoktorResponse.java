@@ -20,7 +20,7 @@ public class TerminDoktorResponse {
     private String krajTermina;
     private String statusTermina;
 
-    private TerminDoktorResponse(Termin termin){
+    public TerminDoktorResponse(Termin termin){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         this.id = termin.getId();
         if (termin.getStudent() != null){
