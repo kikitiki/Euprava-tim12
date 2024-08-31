@@ -1,0 +1,27 @@
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Sofia&effect=neon|outline|emboss|shadow-multiple"
+/>
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container-fluid">
+    <a class="navbar-brand font-effect-shadow-multiple" >
+      <strong  class="font-effect-emboss" href="">eUprava</strong>
+    </a>
+    <!-- <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button> -->
+    <ul class="navbar-nav">
+      <li class="nav-item" *ngIf="ulogovan">
+        <button type="button" class="btn" style="font-family: Sofia, serif; color: #ffffff;background-color: rgba(9, 26, 102, 0.158);" (click)="onLogout()">Logout</button>   
+      </li>
+    </ul>
+  </div>
+</nav>
