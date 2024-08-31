@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,5 +24,17 @@ public class Konkurs {
     @Column(name = "skolska_godina")
     private String skolskaGodina;
 
+    @Column(name = "opis")
+    private String opis;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "datum_pocetka")
+    private Date datumPocetka;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "datum_zavrsetka")
+    private Date datumZavrsetka;
 }
+
+
+

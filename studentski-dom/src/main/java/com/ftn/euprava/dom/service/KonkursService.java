@@ -48,7 +48,9 @@ public class KonkursService {
         konkursDTO.setId(konkurs.getId());
         konkursDTO.setGrad(konkurs.getGrad());
         konkursDTO.setSkolskaGodina(konkurs.getSkolskaGodina());
-        // Dodajte ostale informacije prema potrebi
+        konkursDTO.setOpis(konkurs.getOpis());
+        konkursDTO.setDatumPocetka(konkurs.getDatumPocetka());
+        konkursDTO.setDatumZavrsetka(konkurs.getDatumZavrsetka());
         return konkursDTO;
     }
     public Optional<Konkurs> getKonkursById(Long id) {

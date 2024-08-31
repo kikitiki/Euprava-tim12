@@ -1,5 +1,6 @@
 package com.ftn.euprava.dom.repository;
 
+import com.ftn.euprava.dom.model.Kartica;
 import com.ftn.euprava.dom.model.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,6 +12,10 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> findByBodoviGreaterThan(double bodovi);
     List<Student> findByBodoviGreaterThanAndSobaIsNull(double bodovi);
     Optional<Student> findByJmbg(String jmbg);
+    List<Student> findByBodoviGreaterThanOrderByBodoviDesc(int bodovi);
+    List<Student> findByKarticaNot(Kartica kartica);
+
+
 
 
 
