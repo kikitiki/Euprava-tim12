@@ -58,15 +58,36 @@ public class KonkursController {
         }
     }
 
+    @GetMapping("/by-jmbg/{jmbg}")
+    public ResponseEntity<StudentDTO> getStudentByJmbg(@PathVariable String jmbg) {
+        return studentService.getStudentByJmbg(jmbg)
+                .map(studentDTO -> ResponseEntity.ok(studentDTO))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PostMapping("/prijavi-se-na-konkurs")
-    public ResponseEntity<String> prijaviSeNaKonkurs(@RequestBody StudentDTO studentDTO) {
+    public ResponseEntity<String> prijaviStudentaNaKonkurs(@RequestBody StudentDTO studentDTO) {
         try {
             studentService.prijaviStudentaNaKonkurs(studentDTO);
-            return new ResponseEntity<>("Student je uspešno prijavljen na konkurs.", HttpStatus.OK);
+            return ResponseEntity.ok("Student je uspešno prijavljen na konkurs.");
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
+
+//    @PostMapping("/prijavi-se-na-konkurs")
+//    public ResponseEntity<String> prijaviSeNaKonkurs(@RequestBody StudentDTO studentDTO) {
+//        try {
+//            studentService.prijaviStudentaNaKonkurs(studentDTO);
+//            return new ResponseEntity<>("Student je uspešno prijavljen na konkurs.", HttpStatus.OK);
+//        } catch (IllegalArgumentException e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+
     @GetMapping("/rang-lista")
     public List<Student> getRangLista() {
         return studentRepository.findByBodoviGreaterThan(0);

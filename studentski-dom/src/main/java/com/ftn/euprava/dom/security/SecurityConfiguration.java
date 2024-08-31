@@ -66,14 +66,11 @@ public class SecurityConfiguration  extends WebSecurityConfigurerAdapter{
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
-                .antMatchers("/api/konkursi").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/konkursi/prijavi-se-na-konkurs").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/konkursi/rang-lista").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/konkursi/dodeli-sobu").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/api/**").permitAll() // Omogućava pristup svim API rutama bez autentifikacije
+                .anyRequest().permitAll(); // Omogućava pristup svim ostalim rutama bez autentifikacije
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
     }
-
-
 }
+
+

@@ -10,6 +10,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Optional<Student> findByUsername(String username);
     List<Student> findByBodoviGreaterThan(double bodovi);
     List<Student> findByBodoviGreaterThanAndSobaIsNull(double bodovi);
+    Optional<Student> findByJmbg(String jmbg);
+
 
 
 
