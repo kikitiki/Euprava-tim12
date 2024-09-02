@@ -8,6 +8,7 @@ import {UpravnikHomeComponent} from "./upravnik-home/upravnik-home.component";
 import {DodeliSobuComponent} from "./dodeli-sobu/dodeli-sobu.component";
 import {RangListaSobaComponent} from "./rang-lista-soba/rang-lista-soba.component";
 import {SobaInfoComponent} from "./soba-info/soba-info.component";
+import {CekajuKarticuComponent} from "./cekaju-karticu/cekaju-karticu.component";
 
 
 const routes: Routes = [
@@ -18,7 +19,9 @@ const routes: Routes = [
   { path: 'upravnik/:token', component: UpravnikHomeComponent },
   { path: 'prijavi-se', component: PrijavaComponent },
   { path: 'dodeli-sobu', component: DodeliSobuComponent},
-  {path: 'soba-info/:username', component: SobaInfoComponent}
+  {path: 'soba-info/:username', component: SobaInfoComponent},
+  { path: 'cekaju-karticu', component: CekajuKarticuComponent } // Dodajte ovu rutu
+
 ];
 
 @NgModule({

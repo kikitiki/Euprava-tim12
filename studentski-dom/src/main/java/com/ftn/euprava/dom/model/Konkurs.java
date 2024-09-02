@@ -1,10 +1,14 @@
 package com.ftn.euprava.dom.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -27,13 +31,15 @@ public class Konkurs {
     @Column(name = "opis")
     private String opis;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "datum_pocetka")
-    private Date datumPocetka;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate datumPocetka;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "datum_zavrsetka")
-    private Date datumZavrsetka;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate datumZavrsetka;
 }
 
 

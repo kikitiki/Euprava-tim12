@@ -49,4 +49,8 @@ export class PocetnaStranicaComponent implements OnInit {
   navigateToSobaInfo(username: string) {
     this.router.navigate([`/soba-info/${username}`]);
   }
+
+  navigateToCekajuKarticu() {
+    this.router.navigate(['/cekaju-karticu']);
+  }
 }

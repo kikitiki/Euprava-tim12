@@ -3,9 +3,9 @@ INSERT INTO dom (id, naziv) VALUES
 (2, 'Dom B'),
 (3, 'Dom C');
 
-INSERT INTO konkurs (id, grad, skolska_godina) VALUES
-(1, 'Beograd', '2024/2025'),
-(2, 'Novi Sad', '2024/2025');
+INSERT INTO konkurs (id, grad, skolska_godina, opis, datum_pocetka, datum_zavrsetka) VALUES
+(3, 'Beograd', '2024/2025', 'Opis konkursa za Beograd', '2024-09-01', '2024-09-30'),
+(4, 'Novi Sad', '2024/2025', 'Opis konkursa za Novi Sad', '2024-09-01', '2024-09-30');
 
 
 INSERT INTO soba (id, broj_sobe, dom_id) VALUES

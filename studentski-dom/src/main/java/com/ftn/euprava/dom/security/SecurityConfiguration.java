@@ -15,25 +15,26 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfiguration  extends WebSecurityConfigurerAdapter{
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
-    public void configureAuthentication(
-            AuthenticationManagerBuilder authenticationManagerBuilder)
+    public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder)
             throws Exception {
-
         authenticationManagerBuilder
-                .userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
+                .userDetailsService(this.userDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
-
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -47,30 +48,34 @@ public class SecurityConfiguration  extends WebSecurityConfigurerAdapter{
     }
 
     @Bean
-    public AuthenticationTokenFilter authenticationTokenFilterBean()
-            throws Exception {
+    public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
         AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();
-        authenticationTokenFilter
-                .setAuthenticationManager(authenticationManagerBean());
+        authenticationTokenFilter.setAuthenticationManager(authenticationManagerBean());
         return authenticationTokenFilter;
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:4202")); // Izmeniti na odgovarajući origin
+        configuration.setAllowedMethods(Arrays.asList("*")); // Dozvoli sve HTTP metode
+        configuration.setAllowedHeaders(Arrays.asList("*")); // Dozvoli sve zaglavlja
+        configuration.setAllowCredentials(true); // Dozvoli slanje kolačića i druge osetljive informacije
 
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Primeni CORS na sve rute
+        return source;
+    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .headers().cacheControl().disable()
-                .and().cors()
-                .and().headers().frameOptions().disable()
-                .and().csrf().disable()
+                .cors().and() // Omogući CORS
+                .csrf().disable() // Isključi CSRF zaštitu
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
-                .antMatchers("/api/**").permitAll() // Omogućava pristup svim API rutama bez autentifikacije
-                .anyRequest().permitAll(); // Omogućava pristup svim ostalim rutama bez autentifikacije
+                .anyRequest().permitAll(); // Dozvoli pristup svim rutama bez autentifikacije
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
     }
 }
-
-

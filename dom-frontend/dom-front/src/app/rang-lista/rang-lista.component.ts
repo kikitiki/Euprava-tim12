@@ -11,11 +11,16 @@ import { StudentDTO } from '../model/StudentDTO';
 })
 export class RangListaComponent implements OnInit {
   rangLista: any[] = [];
+
   constructor(private konkursService: KonkursService) { }
 
   ngOnInit(): void {
     this.konkursService.getRangLista().subscribe(data => {
       this.rangLista = data;
     });
+  }
+
+  isSeparator(item: any): boolean {
+    return typeof item === 'string' && item === '----';
   }
 }

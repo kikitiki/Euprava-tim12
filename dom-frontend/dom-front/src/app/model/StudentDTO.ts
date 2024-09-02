@@ -8,7 +8,8 @@ export class StudentDTO {
   godinaStudiranja?: number;
   osvojeniBodovi?: number;
   prosek?: number;
-  kartica?: string;
+  kartica?: string; // Ako je kartica enum, trebaš koristiti odgovarajući tip
   bodovi?: number;
-  konkursId?: number;
+  konkursId?: number; // Ako backend koristi Long, možeš ostaviti kao number ako frontend ne koristi Long
+  sobaId?: number; // Ako backend koristi Long, možeš ostaviti kao number ako frontend ne koristi Long
 }

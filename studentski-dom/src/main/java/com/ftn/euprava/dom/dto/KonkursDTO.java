@@ -2,6 +2,7 @@ package com.ftn.euprava.dom.dto;
 
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -10,7 +11,7 @@ public class KonkursDTO {
     private String grad;
     private String skolskaGodina;
     private String opis;
-    private Date datumPocetka;
-    private Date datumZavrsetka;
+    private LocalDate datumPocetka;
+    private LocalDate datumZavrsetka;
 }
 

@@ -57,6 +57,10 @@ export class UpravnikHomeComponent implements OnInit {
   goBack(){
     this.router.navigate(['upravnik',localStorage.getItem('jwt')]);
   }
+  navigateToCekajuKarticu() {
+    this.router.navigate(['/cekaju-karticu']);
+  }
+
 
 
 }

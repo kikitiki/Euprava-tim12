@@ -9,4 +9,8 @@
 
     <button type="submit" [disabled]="!username || !sobaId">Dodeli sobu</button>
   </form>
+
+  <div *ngIf="message" class="alert">
+    {{ message }}
+  </div>
 </div>

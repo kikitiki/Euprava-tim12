@@ -4,16 +4,20 @@
   <ul *ngIf="konkursi.length > 0">
     <li *ngFor="let konkurs of konkursi">
       <h3>{{ konkurs.grad }}</h3>
-      <p>{{ konkurs.skolskaGodina }}</p>
+      <p>Školska godina: {{ konkurs.skolskaGodina }}</p>
+      <p>Opis: {{ konkurs.opis }}</p> <!-- Prikaz opisa -->
+      <p>Datum početka: {{ konkurs.datumPocetka }}</p> <!-- Prikaz datuma početka -->
+      <p>Datum završetka: {{ konkurs.datumZavrsetka }}</p> <!-- Prikaz datuma završetka -->
     </li>
   </ul>
 
   <p *ngIf="konkursi.length === 0">Nema dostupnih konkursa.</p>
+
   <button (click)="navigateToPrijaviSe()">Prijavi se na konkurs</button>
   <button (click)="goBack()">Nazad</button>
   <button (click)="navigateToRangLista()">Rang Lista</button>
   <button (click)="navigateToSobaInfo(student?.username)">Prikazi informacije o sobi</button>
-
+  <button (click)="navigateToCekajuKarticu()">Prikazi studente koji čekaju karticu</button>
 
 </div>
 

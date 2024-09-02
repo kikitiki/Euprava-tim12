@@ -1,8 +1,13 @@
 <div *ngIf="rangLista">
   <h2>Rang Lista</h2>
   <ul>
-    <li *ngFor="let student of rangLista">
-      {{ student.ime }} {{ student.prezime }} - Bodovi: {{ student.bodovi }}
+    <li *ngFor="let item of rangLista">
+      <ng-container *ngIf="!isSeparator(item)">
+        {{ item.ime }} {{ item.prezime }} - Bodovi: {{ item.bodovi }}
+      </ng-container>
+      <ng-container *ngIf="isSeparator(item)">
+        <hr> <!-- Prikaz crte -->
+      </ng-container>
     </li>
   </ul>
 </div>

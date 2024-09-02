@@ -15,6 +15,7 @@ import {UpravnikHomeComponent} from "./upravnik-home/upravnik-home.component";
 import {RangListaSobaComponent} from "./rang-lista-soba/rang-lista-soba.component";
 import {DodeliSobuComponent} from "./dodeli-sobu/dodeli-sobu.component";
 import {SobaInfoComponent} from "./soba-info/soba-info.component";
+import {CekajuKarticuComponent} from "./cekaju-karticu/cekaju-karticu.component";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,9 @@ import {SobaInfoComponent} from "./soba-info/soba-info.component";
     UpravnikHomeComponent,
     RangListaSobaComponent,
     DodeliSobuComponent,
-    SobaInfoComponent
+    SobaInfoComponent,
+    CekajuKarticuComponent
+
   ],
   imports: [
     BrowserModule,

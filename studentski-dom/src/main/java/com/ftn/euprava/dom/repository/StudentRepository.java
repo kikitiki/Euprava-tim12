@@ -12,7 +12,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> findByBodoviGreaterThan(double bodovi);
     List<Student> findByBodoviGreaterThanAndSobaIsNull(double bodovi);
     Optional<Student> findByJmbg(String jmbg);
-    List<Student> findByBodoviGreaterThanOrderByBodoviDesc(int bodovi);
+    List<Student> findByBodoviGreaterThanOrderByBodoviDesc(double bodovi);
     List<Student> findByKarticaNot(Kartica kartica);
 
 
