@@ -1,6 +1,7 @@
 package com.ftn.euprava.fakultet.service;
 
 import com.ftn.euprava.fakultet.dto.StudentDTO;
+import com.ftn.euprava.fakultet.model.Kartica;
 import com.ftn.euprava.fakultet.model.Student;
 import com.ftn.euprava.fakultet.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ public class StudentService {
         studentDTO.setGodinaStudiranja(student.getGodinaStudiranja());
         studentDTO.setOsvojeniBodovi(student.getOsvojeniBodovi());
         studentDTO.setProsek(student.getProsek());
+        studentDTO.setKartica(student.getKartica());
         return studentDTO;
     }
 

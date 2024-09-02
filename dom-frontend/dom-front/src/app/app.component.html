@@ -1,5 +1,9 @@
-<div>
-  <app-pocetna-stranica></app-pocetna-stranica>
+<div *ngIf="isStudent">
+  <app-student-home></app-student-home>
 </div>
-<router-outlet></router-outlet>
 
+<div *ngIf="isUpravnik">
+  <app-upravnik-home></app-upravnik-home>
+</div>
+
+<router-outlet></router-outlet>

@@ -1,0 +1,33 @@
+<div>
+  <h2>Studenti koji čekaju karticu</h2>
+  <table *ngIf="studentiKojiCekajuKarticu.length > 0">
+    <thead>
+    <tr>
+      <th>JMBG</th>
+      <th>Ime</th>
+      <th>Prezime</th>
+      <th>Username</th>
+      <th>Polje kartice</th>
+      <th *ngIf="isUpravnik">Ažuriraj karticu</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let student of studentiKojiCekajuKarticu">
+      <td>{{student.jmbg}}</td>
+      <td>{{student.ime}}</td>
+      <td>{{student.prezime}}</td>
+      <td>{{student.username}}</td>
+      <td>{{student.kartica}}</td>
+      <td *ngIf="isUpravnik">
+        <button
+          *ngIf="student.jmbg"
+          (click)="azurirajKarticu(student.jmbg)">Ažuriraj</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <p *ngIf="studentiKojiCekajuKarticu.length === 0">Nema studenata koji čekaju karticu.</p>
+
+  <button (click)="goBack()">Nazad</button>
+
+</div>

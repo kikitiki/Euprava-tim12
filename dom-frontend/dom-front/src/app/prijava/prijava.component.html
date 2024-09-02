@@ -1,27 +1,28 @@
-<div class="container">
-  <h2>Prijava na konkurs</h2>
-  <form (ngSubmit)="onSubmit()" #prijavaForm="ngForm">
-    <div>
-      <label for="username">Korisničko ime:</label>
-      <input type="text" id="username" [(ngModel)]="studentDTO.username" name="username" required>
-    </div>
+<div>
+  <h2>Pretraži Studenta</h2>
+  <input [(ngModel)]="jmbg" placeholder="Unesi JMBG" />
+  <button (click)="searchStudent()">Pretraži</button>
+
+  <div *ngIf="student">
+    <h3>Detalji Studenta</h3>
+    <p>Ime: {{student.ime}}</p>
+    <p>Prezime: {{student.prezime}}</p>
+    <p>Godina Studiranja: {{student.godinaStudiranja}}</p>
+    <p>Osvojeni Bodovi: {{student.osvojeniBodovi}}</p>
+    <p>Prosek: {{student.prosek}}</p>
 
     <div>
-      <label for="godinaStudiranja">Godina studiranja:</label>
-      <input type="number" id="godinaStudiranja" [(ngModel)]="studentDTO.godinaStudiranja" name="godinaStudiranja" required>
+      <label for="konkursId">ID Konkursa:</label>
+      <input [(ngModel)]="konkursId" id="konkursId" placeholder="Unesi ID Konkursa" type="number" />
     </div>
-    <div>
-      <label for="osvojeniBodovi">Osvojeni bodovi:</label>
-      <input type="number" id="osvojeniBodovi" [(ngModel)]="studentDTO.osvojeniBodovi" name="osvojeniBodovi" required>
-    </div>
-    <div>
-      <label for="prosek">Prosek:</label>
-      <input type="number" step="0.01" id="prosek" [(ngModel)]="studentDTO.prosek" name="prosek" required>
-    </div>
-    <div>
-      <label for="konkursId">ID konkursa:</label>
-      <input type="number" id="konkursId" [(ngModel)]="studentDTO.konkursId" name="konkursId" required>
-    </div>
-    <button type="submit">Prijavi se na konkurs</button>
-  </form>
+    <button (click)="applyForCompetition()">Prijavi se na Konkurs</button>
+  </div>
+
+  <div *ngIf="successMessage">
+    <p>{{successMessage}}</p>
+  </div>
+
+  <div *ngIf="errorMessage">
+    <p>{{errorMessage}}</p>
+  </div>
 </div>
