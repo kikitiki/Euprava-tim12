@@ -1,26 +1,23 @@
-<div>
+<div class="container mt-4">
   <h2>Dostupni Konkursi</h2>
 
-  <ul *ngIf="konkursi.length > 0">
-    <li *ngFor="let konkurs of konkursi">
-      <h3>{{ konkurs.grad }}</h3>
-      <p>Školska godina: {{ konkurs.skolskaGodina }}</p>
-      <p>Opis: {{ konkurs.opis }}</p> <!-- Prikaz opisa -->
-      <p>Datum početka: {{ konkurs.datumPocetka }}</p> <!-- Prikaz datuma početka -->
-      <p>Datum završetka: {{ konkurs.datumZavrsetka }}</p> <!-- Prikaz datuma završetka -->
+  <ul class="list-group mt-3" *ngIf="konkursi.length > 0">
+    <li class="list-group-item" *ngFor="let konkurs of konkursi">
+      <h4>{{ konkurs.grad }}</h4>
+      <p><strong>Školska godina:</strong> {{ konkurs.skolskaGodina }}</p>
+      <p><strong>Opis:</strong> {{ konkurs.opis }}</p>
+      <p><strong>Datum početka:</strong> {{ konkurs.datumPocetka | date:'dd.MM.yyyy' }}</p>
+      <p><strong>Datum završetka:</strong> {{ konkurs.datumZavrsetka | date:'dd.MM.yyyy' }}</p>
     </li>
   </ul>
 
-  <p *ngIf="konkursi.length === 0">Nema dostupnih konkursa.</p>
+  <p *ngIf="konkursi.length === 0" class="mt-3">Nema dostupnih konkursa.</p>
 
-  <button (click)="navigateToPrijaviSe()">Prijavi se na konkurs</button>
-  <button (click)="goBack()">Nazad</button>
-  <button (click)="navigateToRangLista()">Rang Lista</button>
-  <button (click)="navigateToSobaInfo(student?.username)">Prikazi informacije o sobi</button>
-  <button (click)="navigateToCekajuKarticu()">Prikazi studente koji čekaju karticu</button>
-
+  <div class="mt-4">
+    <button class="btn btn-primary me-2" (click)="navigateToPrijaviSe()">Prijavi se na konkurs</button>
+    <button class="btn btn-secondary me-2" (click)="goBack()">Nazad</button>
+    <button class="btn btn-info me-2" (click)="navigateToRangLista()">Rang Lista</button>
+    <button class="btn btn-warning" (click)="navigateToSobaInfo(student?.username)">Prikazi informacije o sobi</button>
+    <button class="btn btn-danger ms-2" (click)="navigateToCekajuKarticu()">Prikazi studente koji čekaju karticu</button>
+  </div>
 </div>
-
-
-
-
