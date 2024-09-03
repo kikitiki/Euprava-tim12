@@ -57,4 +57,8 @@ export class AuthService {
     return this.getJwtToken() != null && this.getJwtToken() != undefined ;
   }
 
+
+  register(user: any): Observable<any> {
+    return this.http.post('http://localhost:8086/api/auth/register', JSON.stringify(user), { headers: this.headers, responseType: 'text' });
+  }
 }

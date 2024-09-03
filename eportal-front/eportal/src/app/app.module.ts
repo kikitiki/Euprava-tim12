@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './components/login/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { LogoutComponent } from './components/logout/logout.component';
     HomeComponent,
     CarouselComponent,
     LoginComponent,
-    LogoutComponent
+    LogoutComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
