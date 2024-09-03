@@ -2,8 +2,11 @@ package com.ftn.authservice.authservice.entity;
 
 
 import lombok.Data;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 
 @Entity
@@ -15,6 +18,12 @@ public class Korisnik {
     private String ime;
     private String prezime;
     private String username;
+
+
+    @Nullable
+    @Pattern(regexp = "\\d{13}", message = "JMBG mora sadržati tačno 13 cifara.")
+    @Column(nullable = true, unique = true)
+    private String jmbg;
 
     @Column(length = 60)
     private String lozinka;

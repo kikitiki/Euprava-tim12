@@ -22,6 +22,8 @@ public class DataService {
         korisnik.setLozinka(passwordEncoder.encode("natasa123"));
         korisnik.setUloga("DOKTOR");
         korisnik.setEnabled(false);
+        korisnik.setJmbg("1234567890123");  // Dodaj JMBG
+
 
         Korisnik korisnik1 = new Korisnik();
         korisnik1.setIme("Andjela");
@@ -30,6 +32,8 @@ public class DataService {
         korisnik1.setLozinka(passwordEncoder.encode("andjela123"));
         korisnik1.setUloga("DOKTOR");
         korisnik1.setEnabled(false);
+        korisnik.setJmbg("1234567890121");  // Dodaj JMBG
+
 
         Korisnik doktor2 = new Korisnik();
         doktor2.setIme("Dragana");
@@ -38,6 +42,7 @@ public class DataService {
         doktor2.setLozinka(passwordEncoder.encode("dragana123"));
         doktor2.setUloga("DOKTOR");
         doktor2.setEnabled(false);
+        korisnik.setJmbg("1234567890122");  // Dodaj JMBG
 
 //        Korisnik korisnik2 = new Korisnik();
 //        korisnik2.setIme("Milica");
@@ -54,6 +59,7 @@ public class DataService {
         korisnik3.setLozinka(passwordEncoder.encode("maja123"));
         korisnik3.setUloga("STUDENT");
         korisnik3.setEnabled(false);
+        korisnik.setJmbg("1234567890124");  // Dodaj JMBG
 
         Korisnik korisnik2 = new Korisnik();
         korisnik2.setIme("Admin");
@@ -62,6 +68,7 @@ public class DataService {
         korisnik2.setLozinka(passwordEncoder.encode("admin123"));
         korisnik2.setUloga("UPRAVNIK");
         korisnik2.setEnabled(false);
+        korisnik.setJmbg("1234567890125");  // Dodaj JMBG
 
 
 

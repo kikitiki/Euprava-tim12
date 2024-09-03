@@ -1,6 +1,7 @@
 package com.ftn.euprava.dom.service;
 
 import com.ftn.euprava.dom.dto.StudentDTO;
+import com.ftn.euprava.dom.model.Kartica;
 import com.ftn.euprava.dom.model.Konkurs;
 import com.ftn.euprava.dom.model.Student;
 import com.ftn.euprava.dom.repository.StudentRepository;
@@ -18,6 +19,8 @@ public class StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
+
+
 
     @Autowired
     private KonkursService konkursService;
@@ -113,5 +116,31 @@ public class StudentService {
     public void deleteStudent(Long id) {
         studentRepository.deleteById(id);
     }
+
+    public void registerStudent(StudentDTO studentDTO) {
+        // Proveri da li student već postoji
+        Optional<Student> existingStudent = studentRepository.findByJmbg(studentDTO.getJmbg());
+        if (existingStudent.isPresent()) {
+            throw new IllegalArgumentException("Student sa JMBG-om " + studentDTO.getJmbg() + " već postoji.");
+        }
+
+        // Kreiraj novog studenta
+        Student newStudent = new Student();
+        newStudent.setUsername(studentDTO.getUsername());
+        newStudent.setPassword(studentDTO.getPassword()); // Obavezno hash-uj lozinku u stvarnoj aplikaciji
+        newStudent.setIme(studentDTO.getIme());
+        newStudent.setPrezime(studentDTO.getPrezime());
+        newStudent.setJmbg(studentDTO.getJmbg());
+
+        // Postavi default vrednosti za primitivne tipove
+        newStudent.setGodinaStudiranja(studentDTO.getGodinaStudiranja());
+        newStudent.setOsvojeniBodovi(studentDTO.getOsvojeniBodovi());
+        newStudent.setProsek(studentDTO.getProsek());
+        newStudent.setKartica(studentDTO.getKartica());
+        newStudent.setBodovi(studentDTO.getBodovi());
+
+        studentRepository.save(newStudent);
+    }
+
 
 }

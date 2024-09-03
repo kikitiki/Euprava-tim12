@@ -266,5 +266,15 @@ public class KonkursController {
             throw new RuntimeException("Greška pri proveri lekarskog pregleda", e);
         }
     }
+
+    @PostMapping
+    public ResponseEntity<String> registerStudent(@RequestBody StudentDTO studentDTO) {
+        try {
+            studentService.registerStudent(studentDTO);
+            return ResponseEntity.ok("Student uspešno registrovan!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }
 
