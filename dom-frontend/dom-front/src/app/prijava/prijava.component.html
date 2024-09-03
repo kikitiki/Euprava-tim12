@@ -1,28 +1,31 @@
-<div>
+<div class="container mt-4">
   <h2>Pretraži Studenta</h2>
-  <input [(ngModel)]="jmbg" placeholder="Unesi JMBG" />
-  <button (click)="searchStudent()">Pretraži</button>
 
-  <div *ngIf="student">
+  <div class="mb-3">
+    <input [(ngModel)]="jmbg" class="form-control" placeholder="Unesi JMBG" />
+    <button class="btn btn-primary mt-2" (click)="searchStudent()">Pretraži</button>
+  </div>
+
+  <div *ngIf="student" class="mt-4">
     <h3>Detalji Studenta</h3>
-    <p>Ime: {{student.ime}}</p>
-    <p>Prezime: {{student.prezime}}</p>
-    <p>Godina Studiranja: {{student.godinaStudiranja}}</p>
-    <p>Osvojeni Bodovi: {{student.osvojeniBodovi}}</p>
-    <p>Prosek: {{student.prosek}}</p>
+    <p>Ime: {{ student.ime }}</p>
+    <p>Prezime: {{ student.prezime }}</p>
+    <p>Godina Studiranja: {{ student.godinaStudiranja }}</p>
+    <p>Osvojeni Bodovi: {{ student.osvojeniBodovi }}</p>
+    <p>Prosek: {{ student.prosek }}</p>
 
-    <div>
-      <label for="konkursId">ID Konkursa:</label>
-      <input [(ngModel)]="konkursId" id="konkursId" placeholder="Unesi ID Konkursa" type="number" />
+    <div class="mb-3">
+      <label for="konkursId" class="form-label">ID Konkursa:</label>
+      <input [(ngModel)]="konkursId" id="konkursId" class="form-control" placeholder="Unesi ID Konkursa" type="number" />
     </div>
-    <button (click)="applyForCompetition()">Prijavi se na Konkurs</button>
+    <button class="btn btn-primary" (click)="applyForCompetition()">Prijavi se na Konkurs</button>
   </div>
 
-  <div *ngIf="successMessage">
-    <p>{{successMessage}}</p>
+  <div *ngIf="successMessage" class="alert alert-success mt-3">
+    {{ successMessage }}
   </div>
 
-  <div *ngIf="errorMessage">
-    <p>{{errorMessage}}</p>
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
   </div>
 </div>

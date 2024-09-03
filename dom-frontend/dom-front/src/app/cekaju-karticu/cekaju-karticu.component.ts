@@ -14,6 +14,8 @@ import {Router} from "@angular/router";
 export class CekajuKarticuComponent implements OnInit {
   studentiKojiCekajuKarticu: StudentDTO[] = [];
   isUpravnik: boolean = false;
+  message: string = ''; // Dodaj ovu varijablu
+
 
   constructor(
     private konkursService: KonkursService,
@@ -35,25 +37,31 @@ export class CekajuKarticuComponent implements OnInit {
     });
   }
 
-  azurirajKarticu(jmbg: string | undefined) {
-    if (!jmbg) {
-      alert('JMBG nije definisan.');
-      return;
-    }
-
-    if (confirm('Da li ste sigurni da želite da ažurirate karticu ovog studenta?')) {
+  azurirajKarticu(jmbg: string | undefined): void {
+    if (jmbg) {
       this.konkursService.azurirajKarticu(jmbg).subscribe(
-        () => {
-          alert('Kartica uspešno ažurirana.');
-          this.ngOnInit(); // Osvježavanje liste studenata
+        response => {
+          console.log('Odgovor sa servera:', response);
+          this.message = response; // Prikazuje poruku iz backend-a
+          const currentToken = this.securityService.getJwtToken();
+          if (currentToken) {
+            const targetUrl = `/upravnik/${currentToken}`;
+            this.router.navigateByUrl(targetUrl);
+          } else {
+            console.error('Nedostaje parametar token u trenutnoj ruti.');
+          }
         },
-        (error) => {
+        error => {
           console.error('Greška prilikom ažuriranja kartice:', error);
           alert('Došlo je do greške prilikom ažuriranja kartice.');
         }
       );
+    } else {
+      console.error('JMBG nije definisan.');
     }
   }
+
+
   goBack(){
     this.router.navigate(['upravnik',localStorage.getItem('jwt')]);
   }

@@ -4,79 +4,6 @@ import { StudentDTO } from '../model/StudentDTO';
 import { SecurityService } from '../service/security.service';
 import {Router} from "@angular/router";
 
-// @Component({
-//   selector: 'app-prijava',
-//   templateUrl: './prijava.component.html',
-//   styleUrls: ['./prijava.component.css'],
-// })
-// export class PrijavaComponent {
-// //   studentDTO: StudentDTO = {};
-// //
-// //   constructor(private konkursService: KonkursService, private router: Router) {}
-// //
-// //   onSubmit() {
-// //     this.konkursService.prijaviStudentaNaKonkurs(this.studentDTO)
-// //       .pipe(
-// //         catchError((error) => {
-// //           console.error('Greška prilikom prijavljivanja na konkurs:', error);
-// //           // Obradite grešku, prikažite poruku o grešci, itd.
-// //           // Vratite observable sa podacima o grešci kako bi se moglo nastaviti praćenje
-// //           return of(null);
-// //         })
-// //       )
-// //       .subscribe((result) => {
-// //         if (result !== null) {
-// //           console.log('Uspešno ste se prijavili na konkurs!');
-// //           // Dodajte bilo koju dodatnu logiku ili obaveštenja ovde
-// //
-// //           // Nakon uspešne prijave, preusmerite korisnika na željenu stranicu
-// //           this.router.navigate(['/rang-lista']);
-// //         }
-// //       });
-// //   }
-// // }
-//
-//   jmbg: string = '';
-//   student?: StudentDTO;
-//   konkursId: number | undefined;
-//   successMessage?: string;
-//   errorMessage?: string;
-//
-//   constructor(private konkursService: KonkursService, private router: Router) { }
-//
-//   searchStudent() {
-//     this.konkursService.getStudentByJmbg(this.jmbg).subscribe(
-//       data => this.student = data,
-//       error => this.errorMessage = error
-//     );
-//   }
-//
-//   applyForCompetition() {
-//     if (this.jmbg && this.konkursId) {
-//       // Napravi DTO koristeći jmbg i konkursId
-//       const studentDTO: StudentDTO = {
-//         jmbg: this.jmbg,
-//         konkursId: this.konkursId
-//       };
-//       console.log('StudentDTO za prijavu:', studentDTO); // Debug linija da proveriš formirani objekat
-//       this.konkursService.prijaviStudentaNaKonkurs(studentDTO).subscribe(
-//         message => {
-//           this.successMessage = message;
-//           this.router.navigate(['/rang-lista']);
-//         },
-//         error => {
-//           if (error.status === 400) {
-//             this.errorMessage = error.error; // Prikaz greške koju vraća backend
-//           } else {
-//             this.errorMessage = 'Greška prilikom prijavljivanja na konkurs.';
-//           }
-//         }
-//       );
-//     } else {
-//       this.errorMessage = 'Nema podataka o JMBG ili Konkurs ID. Unesite JMBG i odaberite konkurs.';
-//     }
-//   }
-// }
 
 @Component({
   selector: 'app-prijava',
@@ -90,7 +17,7 @@ export class PrijavaComponent {
   successMessage?: string;
   errorMessage?: string;
 
-  constructor(private konkursService: KonkursService, private router: Router) { }
+  constructor(private konkursService: KonkursService, private router: Router, private securityService: SecurityService) { }
 
   searchStudent() {
     this.konkursService.getStudentByJmbg(this.jmbg).subscribe(
@@ -112,19 +39,27 @@ export class PrijavaComponent {
         konkursId: this.konkursId
       };
       console.log('StudentDTO za prijavu:', studentDTO);
+
       this.konkursService.prijaviStudentaNaKonkurs(studentDTO).subscribe(
-        message => {
-          this.successMessage = message;
-          this.errorMessage = undefined; // Očisti poruku o grešci
-          this.router.navigate(['/rang-lista']);
+        (response: any) => {
+          this.successMessage = response;  // Pretpostavljamo da response sadrži poruku
+          this.errorMessage = undefined;  // Očisti poruku o grešci
+
+          // Dobijanje trenutnog tokena iz securityService
+          const currentToken = this.securityService.getJwtToken();
+          if (currentToken) {
+            const targetUrl = `/student/${currentToken}`;
+            this.router.navigateByUrl(targetUrl);
+          } else {
+            console.error('Nedostaje parametar token u trenutnoj ruti.');
+          }
         },
         error => {
-          this.errorMessage = error; // Prikaži grešku
+          this.errorMessage = error.error || 'Došlo je do greške prilikom prijave.';
           this.successMessage = undefined; // Očisti poruku o uspehu
         }
       );
     } else {
       this.errorMessage = 'Molimo Vas da unesete sve potrebne informacije.';
     }
-  }
-}
+  }}

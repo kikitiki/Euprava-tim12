@@ -1,14 +1,16 @@
-<div>
+<div class="container mt-4">
   <h2>Konkursi</h2>
 
-  <ul *ngIf="konkursi.length > 0">
-    <li *ngFor="let konkurs of konkursi">
-      <h3>{{ konkurs.grad }}</h3>
+  <ul class="list-group mt-3" *ngIf="konkursi.length > 0">
+    <li class="list-group-item" *ngFor="let konkurs of konkursi">
+      <h4>{{ konkurs.grad }}</h4>
       <p>{{ konkurs.skolskaGodina }}</p>
     </li>
   </ul>
-  <button (click)="goBack()">Nazad</button>
-  <button (click)="navigateToRangListaSoba()">Konacna rang Lista</button>
-  <button (click)="navigateToCekajuKarticu()">Prikazi studente koji čekaju karticu</button>
 
+  <div class="mt-4">
+    <button class="btn btn-secondary" (click)="goBack()">Nazad</button>
+    <button class="btn btn-info ms-2" (click)="navigateToRangListaSoba()">Konacna rang Lista</button>
+    <button class="btn btn-warning ms-2" (click)="navigateToCekajuKarticu()">Prikazi studente koji čekaju karticu</button>
+  </div>
 </div>

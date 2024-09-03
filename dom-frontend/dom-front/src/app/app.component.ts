@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
       }
     } else {
       // Ako korisnik nije prijavljen, preusmeri na stranicu za prijavu ili neku početnu stranicu
-      this.router.navigate(['/login']);
+      // this.router.navigate(['/login']);
     }
   }
 }

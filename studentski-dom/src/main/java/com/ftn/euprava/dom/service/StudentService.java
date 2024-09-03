@@ -30,26 +30,6 @@ public class StudentService {
 
     private final String fakultetServiceUrl = "http://localhost:9009/api/studenti";
 
-//    public void prijaviStudentaNaKonkurs(StudentDTO studentDTO) {
-//        String username = studentDTO.getUsername();
-//
-//        Student student = studentRepository.findByUsername(username)
-//                .orElseThrow(() -> new IllegalArgumentException("Student sa datim korisničkim imenom ne postoji"));
-//
-//        student.setGodinaStudiranja(studentDTO.getGodinaStudiranja());
-//        student.setOsvojeniBodovi(studentDTO.getOsvojeniBodovi());
-//        student.setProsek(studentDTO.getProsek());
-//
-//        double bodovi =  ( studentDTO.getProsek() + (double) studentDTO.getOsvojeniBodovi() ) / studentDTO.getGodinaStudiranja() ;
-//        student.setBodovi(bodovi);
-//
-//        Konkurs konkurs = konkursService.findKonkursById(studentDTO.getKonkursId())
-//                .orElseThrow(() -> new IllegalArgumentException("Konkurs sa datim ID-om ne postoji"));
-//        student.setKonkurs(konkurs);
-//
-//        studentRepository.save(student);
-//    }
-
     public Optional<StudentDTO> getStudentByJmbg(String jmbg) {
         StudentDTO fakultetStudentDTO = restTemplate.getForObject(fakultetServiceUrl + "/by-jmbg/" + jmbg, StudentDTO.class);
         if (fakultetStudentDTO != null) {
@@ -69,6 +49,13 @@ public class StudentService {
         // Pronađi studenta u dom servisu na osnovu JMBG-a
         Student domStudent = studentRepository.findByJmbg(studentDTO.getJmbg())
                 .orElseThrow(() -> new IllegalArgumentException("Student sa JMBG-om " + studentDTO.getJmbg() + " ne postoji u dom servisu"));
+
+
+        // Provera da li je student već prijavljen na konkurs
+        if (domStudent.getKonkurs() != null && domStudent.getKonkurs().getId() != 0) {
+            throw new IllegalArgumentException("Student je već prijavljen na konkurs.");
+        }
+
 
         // Uporedite JMBG-ove
         if (!fakultetStudentDTO.getJmbg().equals(domStudent.getJmbg())) {

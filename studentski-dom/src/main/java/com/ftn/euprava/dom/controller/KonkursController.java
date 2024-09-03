@@ -87,16 +87,6 @@ public class KonkursController {
 
 
 
-//    @PostMapping("/prijavi-se-na-konkurs")
-//    public ResponseEntity<String> prijaviSeNaKonkurs(@RequestBody StudentDTO studentDTO) {
-//        try {
-//            studentService.prijaviStudentaNaKonkurs(studentDTO);
-//            return new ResponseEntity<>("Student je uspešno prijavljen na konkurs.", HttpStatus.OK);
-//        } catch (IllegalArgumentException e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//    }
-
 
     @GetMapping("/rang-lista")
     public List<Object> getRangLista() {
@@ -153,37 +143,10 @@ public class KonkursController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student sa JMBG-om " + jmbg + " nije pronađen.");
             }
         } catch (Exception e) {
+            // Dodaj detalje o grešci
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Greška: " + e.getMessage());
         }
     }
-
-//    @PostMapping("/dodeli-sobu")
-//    public ResponseEntity<Void> dodeliSobu(@RequestParam String username, @RequestParam Long sobaId) {
-//        try {
-//            Optional<Student> studentOptional = studentRepository.findByUsername(username);
-//            Optional<Soba> sobaOptional = sobaRepository.findById(sobaId);
-//
-//            if (studentOptional.isPresent() && sobaOptional.isPresent()) {
-//                Student student = studentOptional.get();
-//
-//                // Proverite da li student ima "BUDZET" karticu
-//                if (!Kartica.BUDZET.equals(student.getKartica())) {
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Status 400 za nedostatak kartice
-//                }
-//
-//                Soba soba = sobaOptional.get();
-//                student.setSoba(soba);
-//
-//                studentRepository.save(student);
-//
-//                return ResponseEntity.ok().build(); // Status 200 za uspešno dodeljivanje sobe
-//            } else {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Status 404 za student ili soba nisu pronađeni
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Status 500 za grešku na serveru
-//        }
-//    }
 
     @GetMapping("/{username}/soba-info")
     public ResponseEntity<Student> getSobaInfoByUsername(@PathVariable String username) {

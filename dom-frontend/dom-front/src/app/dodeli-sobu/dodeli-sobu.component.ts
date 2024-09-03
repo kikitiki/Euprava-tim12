@@ -33,6 +33,7 @@ export class DodeliSobuComponent {
         }
       },
       (error: HttpErrorResponse) => {
+        console.error('Greška prilikom dodeljivanja sobe:', error); // Dodajte ovo za dodatne informacije o grešci
         if (error.status === 400) {
           this.message = error.error; // Prikazuje poruku greške iz backend-a
         } else if (error.status === 404) {
@@ -44,5 +45,4 @@ export class DodeliSobuComponent {
         }
       }
     );
-  }
-}
+  }}

@@ -17,22 +17,9 @@ export class KonkursService {
     return this.http.get<KonkursDTO[]>(this.baseUrl);
   }
 
-  // prijaviStudentaNaKonkurs(studentDTO: StudentDTO): Observable<void> {
-  //   return this.http.post<void>(`${this.baseUrl}/prijavi-se-na-konkurs`, studentDTO);
-  // }
-
-  // prijaviStudentaNaKonkurs(studentDTO: StudentDTO): Observable<string> {
-  //   return this.http.post<string>(`${this.baseUrl}/prijavi-se-na-konkurs`, studentDTO)
-  //     .pipe(
-  //       catchError(error => {
-  //         console.error('Greška prilikom prijavljivanja:', error); // Dodaj log za greške
-  //         return throwError('Greška prilikom prijavljivanja na konkurs'); // Vraća generičku grešku
-  //       })
-  //     );
-  // }
 
   prijaviStudentaNaKonkurs(studentDTO: StudentDTO): Observable<string> {
-    return this.http.post<string>(`${this.baseUrl}/prijavi-se-na-konkurs`, studentDTO)
+    return this.http.post(`${this.baseUrl}/prijavi-se-na-konkurs`, studentDTO, { responseType: 'text' })
       .pipe(
         catchError(error => {
           console.error('Greška prilikom prijavljivanja:', error);
@@ -65,12 +52,11 @@ export class KonkursService {
 
 
   azurirajKarticu(jmbg: string): Observable<string> {
-    const body = { jmbg: jmbg };
+    const body = { jmbg };
 
     return this.http.post<string>(`${this.baseUrl}/azuriraj-karticu`, body, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      headers: { 'Content-Type': 'application/json' },
+      responseType: 'text' as 'json'
     }).pipe(
       catchError(error => {
         console.error('Greška prilikom ažuriranja kartice:', error);
@@ -79,24 +65,18 @@ export class KonkursService {
     );
   }
 
-  // dodeliSobu(username: string, sobaId: number): Observable<void> {
-  //   const body = new URLSearchParams();
-  //   body.set('username', username);
-  //   body.set('sobaId', sobaId.toString());
-  //
-  //   return this.http.post<void>(`${this.baseUrl}/dodeli-sobu`, body.toString(), {
-  //     headers: {
-  //       'Content-Type': 'application/x-www-form-urlencoded'
-  //     }
-  //   });
-  // }
 
 
-  dodeliSobu(username: string, sobaId: number): Observable<any> {
-    const url = `${this.baseUrl}/dodeli-sobu?username=${username}&sobaId=${sobaId}`;
-    return this.http.post<any>(url, {});
+  dodeliSobu(username: string, sobaId: number): Observable<string> {
+    return this.http.post<string>(`${this.baseUrl}/dodeli-sobu?username=${username}&sobaId=${sobaId}`, null, {
+      responseType: 'text' as 'json'
+    }).pipe(
+      catchError(error => {
+        console.error('Greška prilikom dodeljivanja sobe:', error);
+        return throwError('Došlo je do greške prilikom dodeljivanja sobe.');
+      })
+    );
   }
-
   getSobaInfoByUsername(username: string): Observable<Student> {
     return this.http.get<Student>(`${this.baseUrl}/${username}/soba-info`);
   }

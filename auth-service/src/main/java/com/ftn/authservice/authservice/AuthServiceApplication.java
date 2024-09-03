@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com/ftn/authservice/authservice/repository")
-public class AuthServiceApplication implements CommandLineRunner {
+public class AuthServiceApplication {
 
 	@Autowired
 	private DataService dataService;
@@ -19,10 +19,10 @@ public class AuthServiceApplication implements CommandLineRunner {
 		SpringApplication.run(AuthServiceApplication.class, args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-		dataService.korisnici();
-	}
+//	@Override
+//	public void run(String... args) throws Exception {
+//		dataService.korisnici();
+//	}
 
 	@Bean
 	public RestTemplate restTemplate() {
