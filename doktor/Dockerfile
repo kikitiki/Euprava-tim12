@@ -6,7 +6,6 @@ RUN apt-get update && \
     apt-get install -y maven && \
     apt-get clean
 
-
 # Postavi radni direktorijum u kontejneru
 WORKDIR /app
 
@@ -20,9 +19,8 @@ RUN mvn dependency:go-offline -B
 # Izgradi aplikaciju
 RUN mvn package -DskipTests
 
-# Ekspozuj port 8086
-EXPOSE 8086
+# Ekspozuj port 9008
+EXPOSE 9008
 
 # Definiši komandu za pokretanje aplikacije
-CMD ["java", "-jar", "target/auth-service-0.0.1-SNAPSHOT.jar"]
-
+CMD ["java", "-jar", "target/doktor-0.0.1-SNAPSHOT.jar"]
